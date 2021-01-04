@@ -29,8 +29,11 @@ public class CalendarUtil {
             0x07954,0x06aa0,0x0ad50,0x05b52,0x04b60,0x0a6e6,0x0a4e0,0x0d260,0x0ea65,0x0d530,
             0x05aa0,0x076a3,0x096d0,0x04bd7,0x04ad0,0x0a4d0,0x1d0b6,0x0d250,0x0d520,0x0dd45,
             0x0b5a0,0x056d0,0x055b2,0x049b0,0x0a577,0x0a4b0,0x0aa50,0x1b255,0x06d20,0x0ada0
-    };
-
+    };/**1-4: 表示当年有无闰年，有的话，为闰月的月份，没有的话，为0。
+   * 5-16：为除了闰月外的正常月份是大月还是小月，1为30天，0为29天。
+    *   注意：从1月到12月对应的是第16位到第5位。
+    *17-20： 表示闰月是大月还是小月，仅当存在闰月的情况下有意义。
+     */
     // 允许输入的最小年份
     private final static int MIN_YEAR = 1900;
     // 允许输入的最大年份
@@ -68,19 +71,19 @@ public class CalendarUtil {
     }
 
     /**
-     * 计算阴历{@code lunarYeay}年{@code month}月的天数
-     * @param lunarYeay 阴历年
+     * 计算阴历{@code lunarYear}年{@code month}月的天数
+     * @param lunarYear 阴历年
      * @param month 阴历月
      * @return (int)该月天数
      * @throws Exception
      */
-    private static int getMonthDays(int lunarYeay, int month) throws Exception {
+    private static int getMonthDays(int lunarYear, int month) throws Exception {
         if ((month > 31) || (month < 0)) {
             throw(new Exception("月份有错！"));
         }
         // 0X0FFFF[0000 {1111 1111 1111} 1111]中间12位代表12个月，1为大月，0为小月
         int bit = 1 << (16-month);
-        if(((LUNAR_INFO[lunarYeay - 1900] & 0x0FFFF)&bit)==0){
+        if(((LUNAR_INFO[lunarYear - 1900] & 0x0FFFF)&bit)==0){
             return 29;
         }else {
             return 30;
@@ -238,7 +241,7 @@ public class CalendarUtil {
                 offset += temp;
 
                 if (lunarDay > getLeapMonthDays(lunarYear)) {
-                    throw(new Exception("不合法的农历日期！"));
+                    throw(new Exception("不合法的农历日期！"));//抛出异常
                 }
                 offset += lunarDay;
             }
@@ -361,7 +364,7 @@ public class CalendarUtil {
 
     //特殊小于10加“初”
     //二十几用“廿”
-    private String toChinese_day(String string) {
+    private String toChinese_day(String string) {//转换中文日期
         String[] s1 = { "", "一", "二", "三", "四", "五", "六", "七", "八", "九" };
         String[] s2 = { "十", "廿", "千", "万", "十", "百", "千", "亿", "十", "百", "千" };
 
@@ -415,41 +418,52 @@ public class CalendarUtil {
                     return "元宵节";
                 }
                 break;
+
             case 2:
                 if(day==2){
                     return "龙抬头";
                 }
                 break;
+
             case 3:
                 break;
+
             case 4:
                 break;
+
             case 5:
                 if(day==5){
                     return "端午节";
                 }
                 break;
+
             case 6:
                 break;
+
             case 7:
                 if(day==7){
                     return "七夕节";
                 }
                 break;
+
             case 8:
                 if(day==15){
                     return "中秋节";
                 }
                 break;
+
             case 9:
                 if(day==9){
                     return "重阳节";
                 }
                 break;
+
             case 10:
                 break;
+
             case 11:
                 break;
+
             case 12:
                 if(day==30){
                     return "除夕";
@@ -464,18 +478,23 @@ public class CalendarUtil {
         if(monthday.equals("0501")){
             return "劳动节";
         }
+
         else if(monthday.equals("0601")){
             return "儿童节";
         }
+
         else if(monthday.equals("0701")){
             return "建党节";
         }
+
         else if(monthday.equals("0801")){
             return "建军节";
         }
+
         else if(monthday.equals("1001")){
             return "国庆节";
         }
+
         return "";
     }
 }
