@@ -38,7 +38,7 @@ public class AddCourseActivity extends AppCompatActivity {
         }
         setFinishOnTouchOutside(false);
 
-        if (getSupportActionBar() != null){//去除默认的ActionBar
+        if (getSupportActionBar() != null){//去除默认的ActionBbar
             getSupportActionBar().hide();
         }
 
@@ -56,7 +56,7 @@ public class AddCourseActivity extends AppCompatActivity {
         else{
             toolbar.setNavigationIcon(R.drawable.ic_back_white_24dp);
         }
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {//设置其点击事件
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {//设置其点击事件。
             @Override
             public void onClick(View v) {
                 finish();
@@ -91,7 +91,7 @@ public class AddCourseActivity extends AppCompatActivity {
     }
 
 
-    public String getWeekString(){//周的拼接字符串
+    public String getWeekString(){//周的拼接字符串。
 
        CheckBox checkBox1 = findViewById(R.id.check_1);
        CheckBox checkBox2 = findViewById(R.id.check_2);
@@ -121,7 +121,7 @@ public class AddCourseActivity extends AppCompatActivity {
 
         return s;
     }
-    public String get_bool_w(CheckBox checkBox){//根据是否选中，生成字符0/1
+    public String get_bool_w(CheckBox checkBox){//根据是否选中，生成字符0/1。
         if(checkBox.isChecked()){
             return "1";
         }

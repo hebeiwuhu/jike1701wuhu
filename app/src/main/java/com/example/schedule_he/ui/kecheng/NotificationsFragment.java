@@ -51,8 +51,8 @@ public class NotificationsFragment extends Fragment{
 
 
 
-    //我的添加代码
-    //星期几
+    //我的添加代码。
+    //星期几。
     private RelativeLayout day;
 
     //SQLite Helper类
@@ -60,7 +60,7 @@ public class NotificationsFragment extends Fragment{
 
     int WEEK = 0;//本周周数
     ImageView imageView;
-    String change_day;//上次修改本周的日子
+    String change_day;//上次修改本周的日子。
 
     int currentCoursesNumber = 0;
     int maxCoursesNumber = 0;
@@ -90,13 +90,13 @@ public class NotificationsFragment extends Fragment{
         //获取今日日期
         Calendar calendar =  Calendar.getInstance();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String the_day = simpleDateFormat.format(calendar.getTime());//今天
+        String the_day = simpleDateFormat.format(calendar.getTime());//今天。
         //读取保存的周数
         preferences=getContext().getSharedPreferences("week_location", Context.MODE_PRIVATE);
         WEEK = preferences.getInt("week",0);
-        change_day = preferences.getString("change_day",the_day);//上次修改时的日期
+        change_day = preferences.getString("change_day",the_day);//上次修改时的日期。
 
-        if(calendar.get(Calendar.DAY_OF_WEEK)==2){//周一的时候判断    *如果周一，并且上次设置“为本周”的日子不是今天，则本周数增1
+        if(calendar.get(Calendar.DAY_OF_WEEK)==2){//周一的时候判断    *如果周一，并且上次设置“为本周”的日子不是今天，则本周数增1。
             if(!change_day.equals(the_day)){
                 ++WEEK;
                 //存储本周周数
@@ -108,12 +108,12 @@ public class NotificationsFragment extends Fragment{
         }
 
         myToolbar=(Toolbar) root.findViewById(R.id.myToolbar3);
-        //不加这行菜单无法显示，告诉fragment我们有菜单的
+        //不加这行菜单无法显示，告诉fragment我们有菜单的。
         setHasOptionsMenu(true);
-        //清理
+        //清理。
         Menu menu = myToolbar.getMenu();
         menu.clear();
-        //加载菜单
+        //加载菜单。
         if(!Side_Menu.night_mode){
             myToolbar.inflateMenu(R.menu.toolbar3);
         }
@@ -151,8 +151,8 @@ public class NotificationsFragment extends Fragment{
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getContext(),"目前处于第"+(position+1)+"周",Toast.LENGTH_SHORT).show();
-                clearView();//清空视图
-                //从数据库读取数据
+                clearView();//清空视图。
+                //从数据库读取数据。
                 loadData(date(position));
             }
 
@@ -176,12 +176,12 @@ public class NotificationsFragment extends Fragment{
             public void onClick(View v) {
                 WEEK=spinner.getSelectedItemPosition();
 
-                //备注修改日期
+                //备注修改日期。
                 Calendar calendar =  Calendar.getInstance();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 change_day = simpleDateFormat.format(calendar.getTime());
 
-                //存储本周周数
+                //存储本周周数。
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putInt("week",WEEK);
                 editor.putString("change_day",change_day);
@@ -196,8 +196,8 @@ public class NotificationsFragment extends Fragment{
     }
 
 
-    private ArrayList<Course>  date(int n){//参数表示周数
-        ArrayList<Course> coursesList = new ArrayList<>(); //课程列表
+    private ArrayList<Course>  date(int n){//参数表示周数。
+        ArrayList<Course> coursesList = new ArrayList<>(); //课程列表。
         SQLiteDatabase sqLiteDatabase =  databaseHelper.getWritableDatabase();
         //Cursor cursor = sqLiteDatabase.rawQuery("select * from courses", null);
 
@@ -218,16 +218,16 @@ public class NotificationsFragment extends Fragment{
         cursor.close();
 
         //找出符合周数的课程
-        ArrayList<Course> coursesList2 = new ArrayList<>(); //符合周的课程列表
+        ArrayList<Course> coursesList2 = new ArrayList<>(); //符合周的课程列表。
 
-        for(Course course :coursesList){//遍历，筛选出对应位为1的课程
+        for(Course course :coursesList){//遍历，筛选出对应位为1的课程。
             String s = course.getWeek();
             String s_week ;
             if(n<20){
-                s_week = s.substring(n,n+1);//截取从n之前开始，到n+1之前结束
+                s_week = s.substring(n,n+1);//截取从n之前开始，到n+1之前结束。
             }
             else{
-                s_week = s.substring(n);//截取最后一位
+                s_week = s.substring(n);//截取最后一位。
             }
 
 
@@ -243,7 +243,7 @@ public class NotificationsFragment extends Fragment{
 
     //从数据库加载数据
     private void loadData(ArrayList<Course> coursesList) {
-        //使用从数据库读取出来的课程信息来加载课程表视图
+        //使用从数据库读取出来的课程信息来加载课程表视图。
         for (Course course : coursesList) {
            viewList1= createLeftView(course);
            viewList2= createItemCourseView(course);
@@ -265,7 +265,7 @@ public class NotificationsFragment extends Fragment{
                 );
     }
 
-    //创建"第几节数"视图
+    //创建"第几节数"视图。
     private  List<View> createLeftView(Course course) {
         int endNumber = course.getEnd();
         List<View> viewList =new ArrayList<View>();
@@ -318,28 +318,28 @@ public class NotificationsFragment extends Fragment{
 
             int height = 180;
 
-            final View v = View.inflate(getContext(), R.layout.course_card, null); //加载单个课程布局
+            final View v = View.inflate(getContext(), R.layout.course_card, null); //加载单个课程布局。
             v.setY(height * (course.getStart()-1)); //设置开始高度,即第几节课开始
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams
-                    (ViewGroup.LayoutParams.MATCH_PARENT,(course.getEnd()-course.getStart()+1)*height - 8); //设置布局高度,即跨多少节课
+                    (ViewGroup.LayoutParams.MATCH_PARENT,(course.getEnd()-course.getStart()+1)*height - 8); //设置布局高度,即跨多少节课。
             v.setLayoutParams(params);
             TextView text = v.findViewById(R.id.text_view);
-            text.setText(course.getCourseName() + "\n" + course.getTeacher() + "\n" + course.getClassRoom()); //显示课程名
+            text.setText(course.getCourseName() + "\n" + course.getTeacher() + "\n" + course.getClassRoom()); //显示课程名。
             day.addView(v);
             viewList.add(v);
-            //长按删除课程
+            //长按删除课程。
             v.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(final View v) {
-                    //弹窗警告
+                    //弹窗警告。
                     new AlertDialog.Builder(root.getContext())
                             .setMessage("删除吗？")
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                  //删除
-                                    v.setVisibility(View.GONE);//先隐藏
-                                    day.removeView(v);//再移除课程视图
+                                  //删除。
+                                    v.setVisibility(View.GONE);//先隐藏。
+                                    day.removeView(v);//再移除课程视图。
                                     SQLiteDatabase sqLiteDatabase =  databaseHelper.getWritableDatabase();
                                     sqLiteDatabase.execSQL("delete from courses where course_name = ?", new String[] {course.getCourseName()});
 
@@ -352,10 +352,7 @@ public class NotificationsFragment extends Fragment{
                         }
                     }).create().show();//创建并显示
 
-//                    v.setVisibility(View.GONE);//先隐藏
-//                    day.removeView(v);//再移除课程视图
-//                    SQLiteDatabase sqLiteDatabase =  databaseHelper.getWritableDatabase();
-//                    sqLiteDatabase.execSQL("delete from courses where course_name = ?", new String[] {course.getCourseName()});
+
                     return true;
                 }
             });
@@ -363,37 +360,13 @@ public class NotificationsFragment extends Fragment{
         return viewList;
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.toolbar3, menu);
-//        return true;
-//    }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.add_courses:
-//                Log.d("he", "已经点击了增加课程: ");
-//                Intent intent = new Intent(root.getContext(), AddCourseActivity.class);
-//                startActivityForResult(intent, 0);
-//                break;
-//            case R.id.menu_delet:
-//                //onDeleteAllClic();
-//                break;
-//        }
-//        return true;
-//    }
     private void onDeleteAllClic(){
         new AlertDialog.Builder(root.getContext())
                 .setMessage("删除全部吗？")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-//                        dbHelper = new NoteBD_RC(getContext());
-//                        SQLiteDatabase db = dbHelper.getWritableDatabase();
-//                        db.delete("notes_rc", null, null);
-//                        db.execSQL("update sqlite_sequence set seq=0 where name='notes_rc'");
-//                        refreshListViwe(_day);
                         SQLiteDatabase sqLiteDatabase =  databaseHelper.getWritableDatabase();
                         sqLiteDatabase.delete("courses", null, null);
                         sqLiteDatabase.execSQL("update sqlite_sequence set seq=0 where name='courses'");
