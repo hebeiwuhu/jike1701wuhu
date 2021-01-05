@@ -201,14 +201,14 @@ public class Edit_RCActivity extends AppCompatActivity {
     public String dateToStr(){//获取时间并规定格式
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String s = simpleDateFormat.format(date);
+        String s = simpleDateFormat.format(date);//
         return s;
     }
     public String dateToStr_For_Tag(){
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String s = simpleDateFormat.format(date);
-        String s2 = s.substring(0,4)+s.substring(5,7)+s.substring(8,10);//拼接为当前日期
+        String s2 = s.substring(0,4)+s.substring(5,7)+s.substring(8,10);//拼接为当前日期//
         //Log.d("he", "格式格式格式"+s_Test);
         return s2;
     }
@@ -216,20 +216,20 @@ public class Edit_RCActivity extends AppCompatActivity {
 
     private void init(){
 
-        et_rc_title=findViewById(R.id.et_title);
-        et_rc_content=findViewById(R.id.et_rc_content);
-        Intent getIntent = getIntent();
-        openMode = getIntent.getIntExtra("mode",0);
+        et_rc_title=findViewById(R.id.et_title);//
+        et_rc_content=findViewById(R.id.et_rc_content);//
+        Intent getIntent = getIntent();//
+        openMode = getIntent.getIntExtra("mode",0);//
         //Log.d("he", "mode是"+openMode);
         if (openMode == 3) {//打开已存在的note
             id = getIntent.getLongExtra("id", 0);
             old_title = getIntent.getStringExtra("title");
-            old_content = getIntent.getStringExtra("content");
-            old_time = getIntent.getStringExtra("time");
-            old_day=getIntent.getStringExtra("day");
-            et_rc_title.setText(old_title);
-            et_rc_content.setText(old_content);//打开文本
-            et_rc_content.setSelection(old_content.length());//光标定位到末尾
+            old_content = getIntent.getStringExtra("content");//
+            old_time = getIntent.getStringExtra("time");//
+            old_day=getIntent.getStringExtra("day");//
+            et_rc_title.setText(old_title);//
+            et_rc_content.setText(old_content);//打开文本//
+            et_rc_content.setSelection(old_content.length());//光标定位到末尾//
         }
         if(openMode == 4){//新建
             old_day=getIntent.getStringExtra("day");
