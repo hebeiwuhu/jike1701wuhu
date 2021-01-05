@@ -36,14 +36,11 @@ import java.util.List;
 
 public class DashboardFragment extends Fragment implements AdapterView.OnItemClickListener {
 
-    //private DashboardViewModel dashboardViewModel;
-
     private NoteBD_RC dbHelper = new NoteBD_RC(getContext());
-    //private Context context = this;
+
     FloatingActionButton btn;
     private Note_RC_Adapter adapter;
     private List<Note_RC> noteList = new ArrayList<Note_RC>();
-
 
     private Toolbar myToolbar;
     private ListView lv_rc;
@@ -58,9 +55,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-       // dashboardViewModel =
-                //ViewModelProviders.of(this).get(DashboardViewModel.class);
-        //root = inflater.inflate(R.layout.fragment_dashboard, container, false);
+
         if(!Side_Menu.night_mode){
             root = inflater.inflate(R.layout.fragment_dashboard, container, false);
         }
@@ -68,13 +63,6 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
             root = inflater.inflate(R.layout.night_layout_dashboard, container, false);
         }
 
-//        final TextView textView = root.findViewById(R.id.text_dashboard);
-//        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
 
         alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 
@@ -319,20 +307,6 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
         refreshListViwe(showday);//刷新
         super.onActivityResult(requestCode, resultCode, data);
 
-//        super.onActivityResult(requestCode, resultCode, data);
-//        String content = data.getStringExtra("content");
-//        String time = data.getStringExtra("time");
-//        //测试接收
-//        Log.d("he1", content);
-//        Log.d("he2", time);
-//        if(!content.equals("")){
-//            Note note = new Note(content,time,1);
-//            DBop op = new DBop(getContext());
-//            op.open();
-//            op.addNote(note);
-//            op.close();
-//        }
-//        refreshListViwe();
     }
 
     public void refreshListViwe(String day){//更新内容

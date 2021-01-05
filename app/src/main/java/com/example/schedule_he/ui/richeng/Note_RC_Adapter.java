@@ -50,7 +50,7 @@ public class Note_RC_Adapter extends BaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+
         mContext.setTheme(R.style.DayTheme);
         View v;
         if(!Side_Menu.night_mode){
@@ -68,62 +68,14 @@ public class Note_RC_Adapter extends BaseAdapter{
         String title = noteList.get(position).getTitle();
         String allText = noteList.get(position).getContent();
         String time = noteList.get(position).getTime();
-        /*if (sharedPreferences.getBoolean("noteTitle" ,true))
-            tv_content.setText(allText.split("\n")[0]);*/
+
         tv_title.setText(title);
         tv_content.setText(allText);  //设置内容
         tv_time.setText(time); //设置时间
 
-        // Log.d("he1", "view内容"+allText);
-        //Save note id to tag
         v.setTag(noteList.get(position).getId());//设置Tag
 
         return v;
     }
-
-//    @Override
-//    public Filter getFilter() {
-//        if (mFilter ==null){
-//            mFilter = new MyFilter();
-//        }
-//        return mFilter;
-//    }
-
-//    class MyFilter extends Filter {
-//        //我们在performFiltering(CharSequence charSequence)这个方法中定义过滤规则
-//        @Override
-//        protected FilterResults performFiltering(CharSequence charSequence) {
-//            FilterResults result = new FilterResults();
-//            List<Note_RC> list;
-//            if (TextUtils.isEmpty(charSequence)) {//当过滤的关键字为空的时候，我们则显示所有的数据
-//                list = backList;
-//            } else {//否则把符合条件的数据对象添加到集合中
-//                list = new ArrayList<>();
-//                for (Note_RC note : backList) {
-//                    if (note.getContent().contains(charSequence)) {
-//                        list.add(note);
-//                    }
-//
-//                }
-//            }
-//            result.values = list; //将得到的集合保存到FilterResults的value变量中
-//            result.count = list.size();//将集合的大小保存到FilterResults的count变量中
-//
-//            return result;
-//        }
-//        //在publishResults方法中告诉适配器更新界面
-//        @Override
-//        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-//            noteList = (List<Note_RC>) filterResults.values;
-//            if (filterResults.count>0){
-//                notifyDataSetChanged();//通知数据发生了改变
-//            }else {
-//                notifyDataSetInvalidated();//通知数据失效
-//            }
-//        }
-//    }
-//
-
-
 
 }
