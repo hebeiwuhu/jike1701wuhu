@@ -8,7 +8,7 @@ public class User extends BmobObject {
     private  String password;
     private  String sex;//性别   1/0   男/女
     private  String universty;//大学
-    private  String myflag;//立flag  相当于个性签名  或者是简介
+    private  String myflag;//个性签名
 
     public String getUsername() {
         return username;
