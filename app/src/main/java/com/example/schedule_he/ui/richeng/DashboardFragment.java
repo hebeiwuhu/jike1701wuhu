@@ -99,7 +99,6 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
         btn2.setOnClickListener(new View.OnClickListener() {//点击添加
             @Override
             public void onClick(View v) {
-                //Log.d("HH", "Ok");//log输出测试
                 Intent intent = new Intent(getContext(), Edit_RCActivity.class);//意图
                 intent.putExtra("mode",4);//模式为4 代表新建笔记
                 intent.putExtra("day",select_day);
@@ -302,7 +301,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
         else{//什么也不做
 
         }
-        //Log.d("he", "mode是"+returnMode);
+     
         String showday = data.getExtras().getString("old_day");
         refreshListViwe(showday);//刷新
         super.onActivityResult(requestCode, resultCode, data);
@@ -319,7 +318,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
         DBop_rc op = new DBop_rc(getContext());
         op.open();
         // set adapter
-        //Log.d("he3", "数据长度"+noteList.size());
+      
         if (noteList.size() > 0){
             noteList.clear();
             //cancelAlarms(noteList);//删除所有闹钟

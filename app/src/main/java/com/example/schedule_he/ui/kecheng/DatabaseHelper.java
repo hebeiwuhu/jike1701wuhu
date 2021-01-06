@@ -23,6 +23,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "class_end integer," +
                 "week text)");
     }
+        @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL("create table students(" +
+                "id integer primary key autoincrement," +
+                "student_name text," +
+                "student_id text," +
+                "class_room text," +
+                "grade integer," +
+                "sex integer," +
+                "pe integer," +
+                "height text," +
+                "parents_phone_num text," +
+                "birthday text," +
+                "emergent_call_num text," +
+        
+                "weight integer)");
+    }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

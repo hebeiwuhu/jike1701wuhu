@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DBop_rc {
-    SQLiteOpenHelper dbHandler;//数据库处理器
+    SQLiteOpenHelper dbHandler;//这是数据库处理器。用来处理数据库。
     SQLiteDatabase db;
 
-    private static final String[] columns = {//把NodeDB每一列找出来做成个数组，便于操作
+    private static final String[] columns = {//把NodeDB每一列找出来做成个数组，便于操作。
             NoteBD_RC.ID,
             NoteBD_RC.TITLE,
             NoteBD_RC.CONTENT,
@@ -24,18 +24,18 @@ public class DBop_rc {
     };
 
     public DBop_rc(Context context){
-        dbHandler = new NoteBD_RC(context);//把DBhandler指向我们的数据库NoteDB
+        dbHandler = new NoteBD_RC(context);//把DBhandler指向我们的数据库NoteDB。
     }
 
     public void open(){
-        db = dbHandler.getWritableDatabase();//打开写入模式
+        db = dbHandler.getWritableDatabase();//打开写入模式。
     }
 
     public void close(){
         dbHandler.close();
     }
 
-    //把note 加入到database里面   //参数为一个数据Node结点
+    //把note 加入到database里面   //参数为一个数据Node结点。
     public Note_RC addNote(Note_RC note){
         //ContentValues专门处理数据
         ContentValues contentValues = new ContentValues();
@@ -65,7 +65,7 @@ public class DBop_rc {
         return null;
     }
 
-    //获取数据库中的所有内容
+    //获取数据库中的所有内容。
     public List<Note_RC> getAllNotes(){
         Cursor cursor = db.query(NoteBD_RC.TABLE_NAME,columns,null,null,null, null, "day,time");
         List<Note_RC> notes = new ArrayList<>();
@@ -101,7 +101,7 @@ public class DBop_rc {
         return notes;
     }
 
-    public int updateNote(Note_RC note) {//更新 更改
+    public int updateNote(Note_RC note) {//更新 更改便签
         //update the info of an existing note
         ContentValues values = new ContentValues();
         values.put(NoteBD_RC.TITLE, note.getTitle());
@@ -113,7 +113,7 @@ public class DBop_rc {
                 NoteBD_RC.ID + "=?",new String[] { String.valueOf(note.getId())});
     }
 
-    public void removeNote(Note_RC note) {//删除
+    public void removeNote(Note_RC note) {//删除便签
         //remove a note according to ID value
         db.delete(NoteBD_RC.TABLE_NAME, NoteBD_RC.ID + "=" + note.getId(), null);
     }

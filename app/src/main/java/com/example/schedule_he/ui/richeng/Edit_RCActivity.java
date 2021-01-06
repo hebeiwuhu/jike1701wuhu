@@ -163,12 +163,12 @@ public class Edit_RCActivity extends AppCompatActivity {
     public void autoSetMessage(){
         if(openMode == 4){//新建笔记
             //Log.d("he", "进来了");
-            if(et_rc_title.getText().toString().length() == 0){//标题为空
-                intent.putExtra("mode", -1); //-1代表什么也没发生
+            if(et_rc_title.getText().toString().length() == 0){//标题为空。
+                intent.putExtra("mode", -1); //-1代表什么也没发生。
                 Toast.makeText(Edit_RCActivity.this, "事件标题为空，未添加", Toast.LENGTH_LONG).show();
             }
             else{
-                intent.putExtra("mode", 0); // 0代表创建了个新的笔记
+                intent.putExtra("mode", 0); // 0代表创建了个新的笔记。
                 intent.putExtra("title", et_rc_title.getText().toString());
                 intent.putExtra("content", et_rc_content.getText().toString());
                 intent.putExtra("time", timeshow);
@@ -176,7 +176,7 @@ public class Edit_RCActivity extends AppCompatActivity {
             }
         }
         else {//打开已有笔记
-            //Log.d("he", "进来了");
+          
             if (et_rc_title.getText().toString().equals(old_title)
                     && et_rc_content.getText().toString().equals(old_content)
                     && timeshow.equals(old_time))//啥也没改 标签也没变
@@ -240,11 +240,11 @@ public class Edit_RCActivity extends AppCompatActivity {
         day=old_day;
         ///////////////////////////////////////
         Note_RC note_rc = new Note_RC();
-        dateArray[0] = Integer.valueOf(day.substring(0,4));            //年
-        dateArray[1] = Integer.valueOf(day.substring(4,6));      //月
-        dateArray[2] = Integer.valueOf(day.substring(6,8));          //日
-        timeArray[0] = note_rc.getHour();            //时
-        timeArray[1] = note_rc.getMinute();          //分
+        dateArray[0] = Integer.valueOf(day.substring(0,4));            //年（year）
+        dateArray[1] = Integer.valueOf(day.substring(4,6));      //月（month）
+        dateArray[2] = Integer.valueOf(day.substring(6,8));          //日（day）
+        timeArray[0] = note_rc.getHour();            //时（hour）
+        timeArray[1] = note_rc.getMinute();          //分（minute）
 
         //Log.d("he", "我获取的形式为 "+y+m+d);
         //Log.d("he", "getday格式为 年："+dateArray[0]+"    月： "+dateArray[1]+"     日："+dateArray[2]);
