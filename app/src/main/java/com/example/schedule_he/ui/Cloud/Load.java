@@ -4,7 +4,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.widget.Toast;
@@ -14,14 +13,10 @@ import androidx.fragment.app.Fragment;
 import com.example.schedule_he.ui.bianqian.DBop;
 import com.example.schedule_he.ui.bianqian.Note;
 import com.example.schedule_he.ui.bianqian.NoteDatabase;
-import com.example.schedule_he.ui.kecheng.Course;
-import com.example.schedule_he.ui.kecheng.DatabaseHelper;
 import com.example.schedule_he.ui.richeng.AlarmReceiver;
 import com.example.schedule_he.ui.richeng.DBop_rc;
 import com.example.schedule_he.ui.richeng.NoteBD_RC;
 import com.example.schedule_he.ui.richeng.Note_RC;
-import com.example.schedule_he.ui.user.LoginActivity;
-import com.example.schedule_he.ui.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +36,6 @@ public class Load {
 
     private NoteDatabase dbHelper;
     private NoteBD_RC dbHelper_rc ;
-    private DatabaseHelper databaseHelper;
     private AlarmManager alarmManager;
 
     public void download(Context context,String username,Fragment fragment){
@@ -76,12 +70,6 @@ public class Load {
         db_rc.delete("notes_rc", null, null);
         db_rc.execSQL("update sqlite_sequence set seq=0 where name='notes_rc'");
 
-        //清空课程
-        databaseHelper = new DatabaseHelper
-                (context, "database.db", null, 1);
-        SQLiteDatabase sqLiteDatabase =  databaseHelper.getWritableDatabase();
-        sqLiteDatabase.delete("courses", null, null);
-        sqLiteDatabase.execSQL("update sqlite_sequence set seq=0 where name='courses'");
     }
     /**
      * 清空云端数据库（用户名）
@@ -92,7 +80,6 @@ public class Load {
         //直到搜索出的数为0
         checkList_Note(username);
         checkList_Note_rc(username);
-        checkList_Courses(username);
     }
 
     /**
@@ -129,41 +116,6 @@ public class Load {
             notes1.setDay(note.getDay());
             notes1.setTime(note.getTime());
             insert(notes1);
-        }
-
-
-        /////////////////
-        databaseHelper = new DatabaseHelper
-                (context, "database.db", null, 1);
-        ArrayList<Course> coursesList1 = new ArrayList<>(); //课程列表
-        SQLiteDatabase sqLiteDatabase =  databaseHelper.getWritableDatabase();
-        //Cursor cursor = sqLiteDatabase.rawQuery("select * from courses", null);
-        Cursor cursor = sqLiteDatabase.query("courses",null,null,null,null, null,null );
-        if (cursor.moveToFirst()) {
-            do {
-                coursesList1.add(new Course(
-                        cursor.getString(cursor.getColumnIndex("course_name")),
-                        cursor.getString(cursor.getColumnIndex("teacher")),
-                        cursor.getString(cursor.getColumnIndex("class_room")),
-                        cursor.getInt(cursor.getColumnIndex("day")),
-                        cursor.getInt(cursor.getColumnIndex("class_start")),
-                        cursor.getInt(cursor.getColumnIndex("class_end")),
-                        cursor.getString(cursor.getColumnIndex("week"))
-                ));
-            } while(cursor.moveToNext());
-        }
-        cursor.close();
-        for(Course cours:coursesList1){
-            Courses cc = new Courses();
-            cc.setUsername(username);
-            cc.setCourse_name(cours.getCourseName());
-            cc.setTeacher(cours.getTeacher());
-            cc.setClass_room(cours.getClassRoom());
-            cc.setDay(cours.getDay());
-            cc.setClass_start(cours.getStart());
-            cc.setClass_end(cours.getEnd());
-            cc.setWeek(cours.getWeek());
-            insert(cc);
         }
     }
     /**
@@ -221,50 +173,6 @@ public class Load {
                 }
             }
         });
-        ///////////////////课程部分
-        BmobQuery<Courses> query_kc = new BmobQuery<Courses>();
-        //查询playerName叫“比目”的数据
-        query_kc.addWhereEqualTo("username", username);
-        //返回50条数据，如果不加上这条语句，默认返回10条数据
-        query_kc.setLimit(500);
-        //执行查询方法
-        query_kc.findObjects(new FindListener<Courses>() {
-            @Override
-            public void done(List<Courses> object, BmobException e) {
-                if(e==null){
-                    for (Courses kc : object) {
-                        Course course = new Course(kc.getCourse_name(), kc.getTeacher(), kc.getClass_room(),
-                                kc.getDay(), kc.getClass_start(),kc.getClass_end(), kc.getWeek());
-                        saveData(course);
-                    }
-                    if(object.size()==500){
-                        Toast.makeText(context,"数据太多，无法下载",Toast.LENGTH_SHORT).show();
-                    }
-                }else{
-                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
-                }
-            }
-        });
-    }
-    //保存数据到数据库(课程)
-    private void saveData(Course course) {
-        SQLiteDatabase sqLiteDatabase =  databaseHelper.getWritableDatabase();
-        sqLiteDatabase.execSQL
-                ("insert into courses(course_name, teacher, class_room, day, class_start, class_end, week) " + "values(?, ?, ?, ?, ?, ?, ?)",
-                        new String[] {course.getCourseName(),
-                                course.getTeacher(),
-                                course.getClassRoom(),
-                                course.getDay()+"",
-                                course.getStart()+"",
-                                course.getEnd()+"",
-                                course.getWeek()}
-                );
-    }
-    /**
-     * 插入本地数据库
-     * **/
-    public void insert_date_offline(){
-
     }
 
     /**
@@ -290,23 +198,6 @@ public class Load {
                     }
                 }
             });
-    }
-    /**删除整条数据**/
-    public void deleteObject_Course(String objectId){
-        Courses courses=new Courses();
-        courses.setObjectId(objectId);
-        courses.setObjectId(objectId);
-        courses.delete(new UpdateListener() {
-            @Override
-            public void done(BmobException e) {
-                if(e==null){
-                    // LogUtil.e(MainActivity.class,"===删除成功===");
-                }else{
-                    // LogUtil.e(MainActivity.class,"删除失败："+e.getMessage()+","+e.getErrorCode());
-                    Log.d("hehe", "检测Bomb运行位置啊啊啊啊嗄222222"+"删除失败："+e.getMessage()+","+e.getErrorCode());
-                }
-            }
-        });
     }
     /**删除整条数据**/
     public void deleteObject_Note(String objectId){
@@ -388,33 +279,6 @@ public class Load {
                     if(object.size()>0){
                         for(Notes_rc notes:object){
                             deleteObject_Notes_Rc(notes.getObjectId());
-                        }
-                        //checkList_Note(username);
-                    }
-                }else{
-                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
-                }
-            }
-        });
-    }
-    /**
-     * 批量查找
-     *
-     * **/
-    public void checkList_Courses(String username){
-        BmobQuery<Courses> query = new BmobQuery<Courses>();
-        //查询playerName叫“比目”的数据
-        query.addWhereEqualTo("username", username);
-        //返回50条数据，如果不加上这条语句，默认返回10条数据
-        query.setLimit(500);
-        //执行查询方法
-        query.findObjects(new FindListener<Courses>() {
-            @Override
-            public void done(List<Courses> object, BmobException e) {
-                if(e==null){
-                    if(object.size()>0){
-                        for(Courses notes:object){
-                            deleteObject_Course(notes.getObjectId());
                         }
                         //checkList_Note(username);
                     }
