@@ -184,12 +184,12 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.rc_delete_all:
-                        onDeleteAllClic();//点击删除，跳转到对应函数
+                        onDeleteAllClic();//点击全部删除，跳转到对应函数
                         break;
-                    case R.id.ic_rc_all://点击日程时间线，获取所有设定日程，并按时间递增顺序显示
+                    case R.id.ic_rc_all://有问题
                         Intent intent1 = new Intent(root.getContext(), RC_xiangxiActivity.class);
                         startActivityForResult(intent1, 0);//用来从FirstActivity跳转到SecondActivity
-
+                           //下方有函数接收这里传回来的结果
                         /** protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
                          super.onActivityResult(requestCode, resultCode, data);
                          if (requestCode == 3 && resultCode == RESULT_OK) {
@@ -266,7 +266,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
         return root;
     }
 
-    
+
 
 
     private void onDeleteAllClic(){//点击全部删除所触发的函数
@@ -350,20 +350,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
         refreshListViwe(showday);//刷新
         super.onActivityResult(requestCode, resultCode, data);
 
-//        super.onActivityResult(requestCode, resultCode, data);
-//        String content = data.getStringExtra("content");
-//        String time = data.getStringExtra("time");
-//        //测试接收
-//        Log.d("he1", content);
-//        Log.d("he2", time);
-//        if(!content.equals("")){
-//            Note note = new Note(content,time,1);
-//            DBop op = new DBop(getContext());
-//            op.open();
-//            op.addNote(note);
-//            op.close();
-//        }
-//        refreshListViwe();
+
     }
 
     public void refreshListViwe(String day){//更新内容
