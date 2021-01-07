@@ -334,6 +334,43 @@ public class Edit_RCActivity extends AppCompatActivity {//就是带有标题栏�
         dateArray[1] = m;
         dateArray[2] = d;
     }
+/*
+        linearLayout_left=customView.findViewById(R.id.left_setting);
+        aSwitch=customView.findViewById(R.id.nightMode);
+        nightMode=customView.findViewById(R.id.ic_night);
+        setIc=customView.findViewById(R.id.settings_image);
+        textSet=customView.findViewById(R.id.settings_text);
+        textNight=customView.findViewById(R.id.night_mode);
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                linearLayout_left.setBackgroundColor(Color.BLACK);
+                nightMode.setImageResource(R.drawable.ic_night_white_24dp);
+                setIc.setImageResource(R.drawable.ic_settings_white_24dp);
+                textSet.setTextColor(Color.WHITE);
+                textNight.setTextColor(Color.WHITE);
+            }
+        });
+
+*/
+        //sharedPreferences = PreferenceManager.getDefaultSharedPreferences(customView.getContext());
+        //Intent intent = getIntent();
+        //if(intent.getExtras() != null) night_change = intent.getBooleanExtra("night_change", false);
+        //else night_change = false;
+
+    //    initView();
+
+        //Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        //setSupportActionBar(myToolbar);
+        //getSupportActionBar().setHomeButtonEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //if(isNightMode()) myToolbar.setNavigationIcon(getDrawable(R.drawable.ic_settings_white_24dp));
+        //else myToolbar.setNavigationIcon(getDrawable(R.drawable.ic_settings_black_24dp));
+
+        //night_Switch.setChecked(night_mode);
+
+
 
     private void setTimeTV(int h, int m){
         //update tv and timeArra
