@@ -7,14 +7,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.CalendarView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,49 +26,75 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.schedule_he.R;
 
 import com.example.schedule_he.ui.Side_Menu;
+import com.example.schedule_he.ui.bianqian.HomeFragment;
+import com.example.schedule_he.ui.bianqian.NoteDatabase;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class DashboardFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class DashboardFragment extends Fragment implements AdapterView.OnItemClickListener {//当被点击时调用方法。
 
-    private NoteBD_RC dbHelper = new NoteBD_RC(getContext());
+    //private DashboardViewModel dashboardViewModel;
 
-    FloatingActionButton btn;
-    private Note_RC_Adapter adapter;
+    private NoteBD_RC dbHelper = new NoteBD_RC(getContext());//sqlite数据库操作对象
+    //private Context context = this;
+    FloatingActionButton btn;//定义悬浮按钮
+    private Note_RC_Adapter adapter;//数据适配器，标准化数据格式
     private List<Note_RC> noteList = new ArrayList<Note_RC>();
 
-    private Toolbar myToolbar;
-    private ListView lv_rc;
-    CalendarView myCalendarView;
-    TextView nong_Li;
+
+    private Toolbar myToolbar;//标准工具栏
+    private ListView lv_rc;//以列表的形式展示具体内容，并且能够根据数据的长度自适应显示
+    CalendarView myCalendarView;//日历组件
+    TextView nong_Li;//文本框
     FloatingActionButton btn2;
-    View root;
+    View root;//视图组件 矩形区域
     private String _day="";
     private String select_day="";
 
     private AlarmManager alarmManager;
-
+/**可以通过它开发手机闹钟类的APP， 而在文档中的解释是：在特定的时刻为我们广播一个指定的Intent，简单说就是我们自己定一个时间，
+ * 然后当到时间时，AlarmManager会为我们广播一个我们设定好的Intent，比如时间到了，可以指向某个 Activity或者Service
+ * 简单说，就是在某个特定时刻运行你的代码，即使你的app没有运行。
+  */
+    /**oncreateview
+     *
+     * @param inflater 用来寻找xml布局下的具体的控件
+     * @param container 表示容器
+     * @param savedInstanceState 保存当前的状态，在活动的生命周期中，只要离开了可见阶段，活动很可能就会被进程终止，这种机制能保存当时的状态
+     * @return 视图
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-
-        if(!Side_Menu.night_mode){
+                             ViewGroup container, Bundle savedInstanceState) {//创建视图层次结构。
+       // dashboardViewModel =
+                //ViewModelProviders.of(this).get(DashboardViewModel.class);
+        //root = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        if(!Side_Menu.night_mode){//非夜间模式
             root = inflater.inflate(R.layout.fragment_dashboard, container, false);
         }
-        else{
+        else{//夜间模式
             root = inflater.inflate(R.layout.night_layout_dashboard, container, false);
-        }
+        }//inflater.inflate将xml转换成一个View对象，用于动态的创建布局
 
+//        final TextView textView = root.findViewById(R.id.text_dashboard);
+//        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+//            @Override
+//            public void onChanged(@Nullable String s) {
+//                textView.setText(s);
+//            }
+//        });
 
-        alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);//获得闹钟实例对象
 
         myToolbar=root.findViewById(R.id.myToolbar2);
         //不加这行菜单无法显示，告诉fragment我们有菜单的
@@ -77,28 +107,28 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
             myToolbar.inflateMenu(R.menu.night_rc_menu);
         }
 
-        myToolbar.setTitle("日程");
+        myToolbar.setTitle("日程");//设置标题
         if(!Side_Menu.night_mode){
-            myToolbar.setNavigationIcon(R.drawable.ic_menu_24dp);
+            myToolbar.setNavigationIcon(R.drawable.ic_menu_24dp);//设置三道杠作为图标
         }
         else{
             myToolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
         }
-        final Side_Menu side_menu = new Side_Menu(root,this,R.id.dashboard_layout,2);
-        side_menu.initPopupView();
+        final Side_Menu side_menu = new Side_Menu(root,this,R.id.dashboard_layout,2);//侧滑菜单栏
+        side_menu.initPopupView();//弹出框
         myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {//点击时弹出
                 side_menu.showPopUpView();
             }
         });
 
 
 
-        btn2=(FloatingActionButton) root.findViewById(R.id.add_richeng);
-        btn2.setOnClickListener(new View.OnClickListener() {//点击添加
+        btn2=(FloatingActionButton) root.findViewById(R.id.add_richeng);//添加日程的设置
+        btn2.setOnClickListener(new View.OnClickListener() {//点击添加    设置监听
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {//点击时触发
                 //Log.d("HH", "Ok");//log输出测试
                 Intent intent = new Intent(getContext(), Edit_RCActivity.class);//意图
                 intent.putExtra("mode",4);//模式为4 代表新建笔记
@@ -108,17 +138,18 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
         });
 
 
-        myCalendarView = (CalendarView) root.findViewById(R.id.cal_View);
+        myCalendarView = (CalendarView) root.findViewById(R.id.cal_View);//编辑日历视图
         Date date = new Date();
         date.setTime(myCalendarView.getDate());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");//格式
         _day=sdf.format(date);
         select_day=_day;//设置选中值初始为当前值
         Log.d("he", "当前获取的日期为" +_day );//获取到时间
         //设置日历点击监听
-        myCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        myCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {//  日期转换的监听
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+
                 month=month+1;
                 String day_format="";
                 if(month<=9){
@@ -148,16 +179,25 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
             }
         });
 
-        myToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+        myToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {//设置点击菜单的监听
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.rc_delete_all:
-                        onDeleteAllClic();
+                        onDeleteAllClic();//点击全部删除，跳转到对应函数
                         break;
-                    case R.id.ic_rc_all:
+                    case R.id.ic_rc_all://有问题
                         Intent intent1 = new Intent(root.getContext(), RC_xiangxiActivity.class);
-                        startActivityForResult(intent1, 0);
+                        startActivityForResult(intent1, 0);//用来从FirstActivity跳转到SecondActivity
+                           //下方有函数接收这里传回来的结果
+                        /** protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+                         super.onActivityResult(requestCode, resultCode, data);
+                         if (requestCode == 3 && resultCode == RESULT_OK) {
+                         // SearchAddressInfo info = (SearchAddressInfo) data.getParcelableExtra("position");
+                         String position = data.getStringExtra("position");
+                         mTvClockInAddress.setText(position);
+                         }
+                         }*/
                         break;
                 }
                 return true;
@@ -177,7 +217,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
         refreshListViwe(_day);
         lv_rc.setAdapter(adapter);//给ListView设置适配器显示内容
         lv_rc.setOnItemClickListener(this);//给文本设置点击事件监听器
-        lv_rc.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        lv_rc.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {//长按具体日程时设置的监听
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 //定义AlertDialog.Builder对象，当长按列表项的时候弹出确认删除对话框
@@ -186,7 +226,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
                 builder.setTitle("提示");
 
                 //添加AlertDialog.Builder对象的setPositiveButton()方法
-                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {//如果点击确定
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Note_RC note=(Note_RC)adapter.getItem(position);
@@ -196,7 +236,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
                             DBop_rc op = new DBop_rc(getContext());
                             op.open();
                             cancelAlarm(curNote);//删除闹钟
-                            op.removeNote(curNote);
+                            op.removeNote(curNote);//删除该日程
                             op.close();
                             //System.out.println("success");
                         }else {
@@ -208,7 +248,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
                 });
 
                 //添加AlertDialog.Builder对象的setNegativeButton()方法
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {//如果点击取消
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -226,12 +266,15 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
         return root;
     }
 
-    private void onDeleteAllClic(){
+
+
+
+    private void onDeleteAllClic(){//点击全部删除所触发的函数
         new AlertDialog.Builder(root.getContext())
                 .setMessage("删除全部吗？")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialog, int which) {//点击确定删除
                         DBop_rc op = new DBop_rc(getContext());
                         op.open();
                         cancelAlarms(op.getAllNotes());//删除所有闹钟
@@ -239,13 +282,13 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
 
                         dbHelper = new NoteBD_RC(getContext());
                         SQLiteDatabase db = dbHelper.getWritableDatabase();
-                        db.delete("notes_rc", null, null);
+                        db.delete("notes_rc", null, null);//删除数据库中数据
                         db.execSQL("update sqlite_sequence set seq=0 where name='notes_rc'");
                         refreshListViwe(_day);
                     }
                 }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface dialog, int which) {//点击取消
                 dialog.dismiss();
             }
         }).create().show();
@@ -306,6 +349,7 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
         String showday = data.getExtras().getString("old_day");
         refreshListViwe(showday);//刷新
         super.onActivityResult(requestCode, resultCode, data);
+
 
     }
 

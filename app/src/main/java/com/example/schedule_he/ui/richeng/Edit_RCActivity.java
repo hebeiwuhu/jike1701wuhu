@@ -31,7 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class Edit_RCActivity extends AppCompatActivity {
+public class Edit_RCActivity extends AppCompatActivity {//就是带有标题栏的Activity.
 
     private DatePickerDialog.OnDateSetListener dateSetListener;
     private TimePickerDialog.OnTimeSetListener timeSetListener;
@@ -60,7 +60,7 @@ public class Edit_RCActivity extends AppCompatActivity {
     private int[] timeArray = new int[2];
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {//初始化
         super.onCreate(savedInstanceState);
         if(!Side_Menu.night_mode){
             setContentView(R.layout.edit_rc_layout);
@@ -97,7 +97,7 @@ public class Edit_RCActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {//设置其点击事件
             @Override
             public void onClick(View v) {
-                autoSetMessage();
+                autoSetMessage();//跳转到日程编辑函数
                 setResult(RESULT_OK,intent);
                 finish();//结束该活动，回到之前的Activity
             }
@@ -107,7 +107,7 @@ public class Edit_RCActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.edit_rc_delete:
-                        onEditRCDeleteClic();
+                        onEditRCDeleteClic();//跳转到删除函数
                         break;
                 }
                 return true;
@@ -124,6 +124,7 @@ public class Edit_RCActivity extends AppCompatActivity {
         new AlertDialog.Builder(Edit_RCActivity.this)
                 .setMessage("删除吗？")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    //分两种情况：1：新编辑的还未保存 2：已经保存了的
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if(openMode == 4) {//新
@@ -139,7 +140,7 @@ public class Edit_RCActivity extends AppCompatActivity {
                         }
                         finish();
                     }
-                }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {//不删除
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -148,7 +149,7 @@ public class Edit_RCActivity extends AppCompatActivity {
     }
 
 
-    public boolean onKeyDown(int keyCode, KeyEvent event){
+    public boolean onKeyDown(int keyCode, KeyEvent event){//不太明白意思
         if(keyCode==KeyEvent.KEYCODE_HOME){
             return true;
         }
@@ -160,9 +161,9 @@ public class Edit_RCActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode,event);
     }
-    public void autoSetMessage(){
-        if(openMode == 4){//新建笔记
-            //Log.d("he", "进来了");
+    public void autoSetMessage(){//日程编辑 分两种情况：1：新建笔记 2：打开已有笔记
+        if(openMode == 4){//新建笔记  两种情况：1：没有输入标题。2：输入标题
+
             if(et_rc_title.getText().toString().length() == 0){//标题为空
                 intent.putExtra("mode", -1); //-1代表什么也没发生
                 Toast.makeText(Edit_RCActivity.this, "事件标题为空，未添加", Toast.LENGTH_LONG).show();
@@ -175,7 +176,7 @@ public class Edit_RCActivity extends AppCompatActivity {
                 intent.putExtra("day", day);//此处不应该为本日日期，而是应该是日历选中的时间
             }
         }
-        else {//打开已有笔记
+        else {//打开已有笔记  分三种情况：1：没做任何改变 2：删除了标题，直接删除日程 3：更改内容
             //Log.d("he", "进来了");
             if (et_rc_title.getText().toString().equals(old_title)
                     && et_rc_content.getText().toString().equals(old_content)
@@ -201,14 +202,14 @@ public class Edit_RCActivity extends AppCompatActivity {
     public String dateToStr(){//获取时间并规定格式
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String s = simpleDateFormat.format(date);//
+        String s = simpleDateFormat.format(date);
         return s;
     }
     public String dateToStr_For_Tag(){
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String s = simpleDateFormat.format(date);
-        String s2 = s.substring(0,4)+s.substring(5,7)+s.substring(8,10);//拼接为当前日期//
+        String s2 = s.substring(0,4)+s.substring(5,7)+s.substring(8,10);//拼接为当前日期
         //Log.d("he", "格式格式格式"+s_Test);
         return s2;
     }
@@ -216,20 +217,20 @@ public class Edit_RCActivity extends AppCompatActivity {
 
     private void init(){
 
-        et_rc_title=findViewById(R.id.et_title);//
-        et_rc_content=findViewById(R.id.et_rc_content);//
-        Intent getIntent = getIntent();//
-        openMode = getIntent.getIntExtra("mode",0);//
+        et_rc_title=findViewById(R.id.et_title);
+        et_rc_content=findViewById(R.id.et_rc_content);
+        Intent getIntent = getIntent();
+        openMode = getIntent.getIntExtra("mode",0);
         //Log.d("he", "mode是"+openMode);
         if (openMode == 3) {//打开已存在的note
             id = getIntent.getLongExtra("id", 0);
             old_title = getIntent.getStringExtra("title");
-            old_content = getIntent.getStringExtra("content");//
-            old_time = getIntent.getStringExtra("time");//
-            old_day=getIntent.getStringExtra("day");//
-            et_rc_title.setText(old_title);//
-            et_rc_content.setText(old_content);//打开文本//
-            et_rc_content.setSelection(old_content.length());//光标定位到末尾//
+            old_content = getIntent.getStringExtra("content");
+            old_time = getIntent.getStringExtra("time");
+            old_day=getIntent.getStringExtra("day");
+            et_rc_title.setText(old_title);
+            et_rc_content.setText(old_content);//打开文本
+            et_rc_content.setSelection(old_content.length());//光标定位到末尾
         }
         if(openMode == 4){//新建
             old_day=getIntent.getStringExtra("day");
@@ -254,28 +255,38 @@ public class Edit_RCActivity extends AppCompatActivity {
         time = findViewById(R.id.time);
         //initialize two textviews
         time.setText(old_time);
-        setDateTV(dateArray[0], dateArray[1], dateArray[2]);
-        if(old_time.equals("")){
+        setDateTV(dateArray[0], dateArray[1], dateArray[2]);//调用函数设置日程编辑初始化日期值
+        if(old_time.equals("")){//设置日程编辑的初始化时间为当前时间+5分钟
             setTimeTV((timeArray[1]>54? timeArray[0]+1 : timeArray[0]), (timeArray[1]+5)%60);
         }
 
         //setTimeTV((timeArray[1]>54? timeArray[0]+1 : timeArray[0]), (timeArray[1]+5)%60);
         Log.d("TAG", "init: "+dateArray[1]);
 
-        dateSetListener = new DatePickerDialog.OnDateSetListener() {
+        //首先调用Calendar类获取年月日，然后将获取到的年月日放进new出来的DatePickerDialog中，这样就可以默认选中当前日期
+        dateSetListener = new DatePickerDialog.OnDateSetListener() {//日期组件
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 setDateTV(year, month+1, dayOfMonth);
             }
         };
-        timeSetListener = new TimePickerDialog.OnTimeSetListener() {
+        /**param
+         * context：当前上下文
+         * listener：时间改变监听器
+         * hourOfDay：初始化的小时
+         * minute：初始化的分钟
+         * is24HourView：是否以24小时显示时间
+         *
+         */
+        timeSetListener = new TimePickerDialog.OnTimeSetListener() {//dialog弹出一个钟表选择时间，钟表仅在Android5.0以上有
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 setTimeTV(hourOfDay, minute);
             }
         };
 
-        set_date.setOnClickListener(new View.OnClickListener() {
+
+        set_date.setOnClickListener(new View.OnClickListener() {//设置监听
             @Override
             public void onClick(View v) {
                 Log.d("he", "设置日期");
@@ -287,7 +298,7 @@ public class Edit_RCActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
-        set_time.setOnClickListener(new View.OnClickListener() {
+        set_time.setOnClickListener(new View.OnClickListener() {//设置监听
             @Override
             public void onClick(View v) {
                 TimePickerDialog dialog1 = new TimePickerDialog(Edit_RCActivity.this,
@@ -323,6 +334,43 @@ public class Edit_RCActivity extends AppCompatActivity {
         dateArray[1] = m;
         dateArray[2] = d;
     }
+/*
+        linearLayout_left=customView.findViewById(R.id.left_setting);
+        aSwitch=customView.findViewById(R.id.nightMode);
+        nightMode=customView.findViewById(R.id.ic_night);
+        setIc=customView.findViewById(R.id.settings_image);
+        textSet=customView.findViewById(R.id.settings_text);
+        textNight=customView.findViewById(R.id.night_mode);
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                linearLayout_left.setBackgroundColor(Color.BLACK);
+                nightMode.setImageResource(R.drawable.ic_night_white_24dp);
+                setIc.setImageResource(R.drawable.ic_settings_white_24dp);
+                textSet.setTextColor(Color.WHITE);
+                textNight.setTextColor(Color.WHITE);
+            }
+        });
+
+*/
+        //sharedPreferences = PreferenceManager.getDefaultSharedPreferences(customView.getContext());
+        //Intent intent = getIntent();
+        //if(intent.getExtras() != null) night_change = intent.getBooleanExtra("night_change", false);
+        //else night_change = false;
+
+    //    initView();
+
+        //Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        //setSupportActionBar(myToolbar);
+        //getSupportActionBar().setHomeButtonEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //if(isNightMode()) myToolbar.setNavigationIcon(getDrawable(R.drawable.ic_settings_white_24dp));
+        //else myToolbar.setNavigationIcon(getDrawable(R.drawable.ic_settings_black_24dp));
+
+        //night_Switch.setChecked(night_mode);
+
+
 
     private void setTimeTV(int h, int m){
         //update tv and timeArra
