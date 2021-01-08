@@ -39,12 +39,12 @@ public class Load {
     private AlarmManager alarmManager;
 
     public void download(Context context,String username,Fragment fragment){
-        clear_date_offline(context,fragment);//清空本地三个数据
+        clear_date_offline(context,fragment);//清空本地数据
         read_date_online(username,context);//读取云端数据并放到本地
     }
 
     public void upload(Context context,String username){
-        clear_date_online(username);//清空云端三个数据
+        clear_date_online(username);//清空云端数据
         read_date_offline(context,username);//读取本地数据并一一上传
     }
 
@@ -234,9 +234,8 @@ public class Load {
         });
     }
     /**
-     * 批量查找
-     *
-     * **/
+     * 云端批量查找并删除便签
+     **/
     public void checkList_Note(String username){
         BmobQuery<Notes> query = new BmobQuery<Notes>();
         query.addWhereEqualTo("username", username);
@@ -262,9 +261,8 @@ public class Load {
         });
     }
     /**
-     * 批量查找
-     *
-     * **/
+     * 云端批量查找并删除日程
+     **/
     public void checkList_Note_rc(String username){
         BmobQuery<Notes_rc> query = new BmobQuery<Notes_rc>();
         //查询playerName叫“比目”的数据

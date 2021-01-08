@@ -11,10 +11,6 @@ import android.util.Log;
 import org.json.JSONException;
 import static android.app.Notification.PRIORITY_MAX;
 
-/**
- * Created by Administrator on 2018/9/13 0013.
- */
-
 public class BackGroundService extends Service {
     Notification notification;
     private Context mContext;
@@ -36,7 +32,7 @@ public class BackGroundService extends Service {
                 .setWhen(System.currentTimeMillis())
                 .setTicker("日程表")
                 .setContentTitle("日程表")
-                .setContentText("日常镖正在运行")
+                .setContentText("日程表正在运行")
                 .setOngoing(true)
                 .setPriority(PRIORITY_MAX)
                 .setContentIntent(pendingIntent)

@@ -25,7 +25,6 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.schedule_he.BarColor;
 import com.example.schedule_he.R;
 import com.example.schedule_he.ui.Side_Menu;
-import com.example.schedule_he.ui.bianqian.EditActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -38,8 +37,6 @@ public class Edit_RCActivity extends AppCompatActivity {
 
     EditText et_rc_title;
     EditText et_rc_content;
-    //private String content;
-    //private String time;
     private String old_title;
     private String old_content;
     private String old_time="";
@@ -114,10 +111,7 @@ public class Edit_RCActivity extends AppCompatActivity {
             }
         });
 
-
         init();
-
-
     }
 
     public void onEditRCDeleteClic() {

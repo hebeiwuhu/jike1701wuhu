@@ -7,18 +7,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.CalendarView;
 import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,16 +22,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.example.schedule_he.R;
 
 import com.example.schedule_he.ui.Side_Menu;
-import com.example.schedule_he.ui.bianqian.HomeFragment;
-import com.example.schedule_he.ui.bianqian.NoteDatabase;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -86,13 +78,6 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
             root = inflater.inflate(R.layout.night_layout_dashboard, container, false);
         }//inflater.inflate将xml转换成一个View对象，用于动态的创建布局
 
-//        final TextView textView = root.findViewById(R.id.text_dashboard);
-//        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
 
         alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);//获得闹钟实例对象
 
@@ -190,14 +175,6 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
                         Intent intent1 = new Intent(root.getContext(), RC_xiangxiActivity.class);
                         startActivityForResult(intent1, 0);//用来从FirstActivity跳转到SecondActivity
 
-                        /** protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-                         super.onActivityResult(requestCode, resultCode, data);
-                         if (requestCode == 3 && resultCode == RESULT_OK) {
-                         // SearchAddressInfo info = (SearchAddressInfo) data.getParcelableExtra("position");
-                         String position = data.getStringExtra("position");
-                         mTvClockInAddress.setText(position);
-                         }
-                         }*/
                         break;
                 }
                 return true;
@@ -260,14 +237,8 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
 
         });
 
-
-
-//////////////////////////////////////////////////////////////////
         return root;
     }
-
-    
-
 
     private void onDeleteAllClic(){//点击全部删除所触发的函数
         new AlertDialog.Builder(root.getContext())
@@ -350,20 +321,6 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
         refreshListViwe(showday);//刷新
         super.onActivityResult(requestCode, resultCode, data);
 
-//        super.onActivityResult(requestCode, resultCode, data);
-//        String content = data.getStringExtra("content");
-//        String time = data.getStringExtra("time");
-//        //测试接收
-//        Log.d("he1", content);
-//        Log.d("he2", time);
-//        if(!content.equals("")){
-//            Note note = new Note(content,time,1);
-//            DBop op = new DBop(getContext());
-//            op.open();
-//            op.addNote(note);
-//            op.close();
-//        }
-//        refreshListViwe();
     }
 
     public void refreshListViwe(String day){//更新内容
@@ -404,13 +361,6 @@ public class DashboardFragment extends Fragment implements AdapterView.OnItemCli
                 break;
         }
     }
-
-
-
-
-
-
-
     /////////设置提醒
 
     //设置提醒

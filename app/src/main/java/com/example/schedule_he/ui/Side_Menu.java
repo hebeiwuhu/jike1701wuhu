@@ -98,43 +98,8 @@ public class Side_Menu {
         WindowManager wm = fra.getActivity().getWindowManager();
         metrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(metrics);
-/*
-        linearLayout_left=customView.findViewById(R.id.left_setting);
-        aSwitch=customView.findViewById(R.id.nightMode);
-        nightMode=customView.findViewById(R.id.ic_night);
-        setIc=customView.findViewById(R.id.settings_image);
-        textSet=customView.findViewById(R.id.settings_text);
-        textNight=customView.findViewById(R.id.night_mode);
-        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                linearLayout_left.setBackgroundColor(Color.BLACK);
-                nightMode.setImageResource(R.drawable.ic_night_white_24dp);
-                setIc.setImageResource(R.drawable.ic_settings_white_24dp);
-                textSet.setTextColor(Color.WHITE);
-                textNight.setTextColor(Color.WHITE);
-            }
-        });
-
-*/
-        //sharedPreferences = PreferenceManager.getDefaultSharedPreferences(customView.getContext());
-        //Intent intent = getIntent();
-        //if(intent.getExtras() != null) night_change = intent.getBooleanExtra("night_change", false);
-        //else night_change = false;
 
         initView();
-
-        //Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        //setSupportActionBar(myToolbar);
-        //getSupportActionBar().setHomeButtonEnabled(true);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        //if(isNightMode()) myToolbar.setNavigationIcon(getDrawable(R.drawable.ic_settings_white_24dp));
-        //else myToolbar.setNavigationIcon(getDrawable(R.drawable.ic_settings_black_24dp));
-
-        //night_Switch.setChecked(night_mode);
-
-
 
     }
     public void showPopUpView(){
@@ -159,23 +124,6 @@ public class Side_Menu {
                 popupCover.showAtLocation(home, Gravity.NO_GRAVITY, 0, 0);
                 popupWindow.showAtLocation(home, Gravity.NO_GRAVITY, 0, 0);
 
-                //setting_image = customView.findViewById(R.id.setting_settings_image);
-                //setting_text = customView.findViewById(R.id.setting_settings_text);
-
-//                setting_image.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        startActivity(new Intent(MainActivity.this, UserSettingsActivity.class));
-//                    }
-//                });
-//
-//                setting_text.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        startActivity(new Intent(MainActivity.this, UserSettingsActivity.class));
-//                    }
-//                });
-//
                 coverView.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
@@ -290,11 +238,6 @@ public class Side_Menu {
     //夜间模式
     private void initView(){
         night_Switch = customView.findViewById(R.id.nightMode);
-//        linearLayout_left=customView.findViewById(R.id.left_setting);
-//        nightMode=customView.findViewById(R.id.ic_night);
-//        setIc=customView.findViewById(R.id.settings_image);
-//        textSet=customView.findViewById(R.id.settings_text);
-//        textNight=customView.findViewById(R.id.night_mode);
         topusername=customView.findViewById(R.id.top_username);
 
         BmobDBHelper.getInstance().init(root.getContext());
@@ -340,6 +283,4 @@ public class Side_Menu {
             }
         });
     }
-
-
 }
