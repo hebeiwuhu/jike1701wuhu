@@ -98,6 +98,14 @@ public class NotificationsFragment extends Fragment{
         WEEK = preferences.getInt("week",0);
         change_day = preferences.getString("change_day",the_day);//上次修改时的日期
 
+           /** protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+              super.onActivityResult(requestCode, resultCode, data)
+               if (requestCode == 3 && resultCode == RESULT_OK) {
+               // SearchAddressInfo info = (SearchAddressInfo) data.getParcelableExtra("position");
+             String position = data.getStringExtra("position");
+                mTvClockInAddress.setText(position);
+                   }
+                  }*/
 
         //一、实现当前周数的更新
         if(calendar.get(Calendar.DAY_OF_WEEK)==2){//周一的时候判断    *如果周一，并且上次设置“为本周”的日子不是今天，则本周数增1
@@ -110,7 +118,16 @@ public class NotificationsFragment extends Fragment{
                 editor.commit();
             }
         }
-
+            /*for(int i = oldVersion; i < newVersion; i++) {
+            switch (i) {
+                case 1:
+                    break;
+                case 2:
+                    updateMode(db);
+                default:
+                    break;
+            }
+        }*/
 
         //二、以下是toolbar的各类设置
 
