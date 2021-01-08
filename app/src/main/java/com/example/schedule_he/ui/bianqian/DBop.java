@@ -37,12 +37,12 @@ public class DBop {//操作的是我们的数据库
     public Note addNote(Note note){
         //ContentValues专门处理数据
         ContentValues contentValues = new ContentValues();
-        contentValues.put(NoteDatabase.CONTENT, note.getContent());//把结点中的content值放入到我们数据库的CONTENT中
+        contentValues.put(NoteDatabase.CONTENT, note.getContent());//把结点中的content值放入到我们数据库的CONTENT�?
         contentValues.put(NoteDatabase.TIME, note.getTime());
         contentValues.put(NoteDatabase.MODE, note.getTag());
         long insertId = db.insert(NoteDatabase.TABLE_NAME, null, contentValues);//自增长的id加入
         note.setId(insertId);//把Node中的id设为数据库中的id
-        Log.d("he1", "插入了"+note.getContent());
+        Log.d("he1", "插入�?+note.getContent());
         return note;
     }
 
@@ -55,7 +55,7 @@ public class DBop {//操作的是我们的数据库
         return e;
     }
 
-    //获取数据库中的所有内容
+    //获取数据库中的所有内�?
     public List<Note> getAllNotes(){
         Cursor cursor = db.query(NoteDatabase.TABLE_NAME,columns,null,null,null, null, null);
 
@@ -89,6 +89,40 @@ public class DBop {//操作的是我们的数据库
         //remove a note according to ID value
         db.delete(NoteDatabase.TABLE_NAME, NoteDatabase.ID + "=" + note.getId(), null);
     }
+public int updateNote(Note note) {//更新 更改
+        //update the info of an existing note
+        ContentValues values = new ContentValues();
+        values.put(NoteDatabase.CONTENT, note.getContent());
+        values.put(NoteDatabase.TIME, note.getTime());
+        values.put(NoteDatabase.MODE, note.getTag());
+        // updating row
+        return db.update(NoteDatabase.TABLE_NAME, values,
+                NoteDatabase.ID + "=?",new String[] { String.valueOf(note.getId())});
+    }
+
+
+    public void removeNote(Note note) {//删除
+        //remove a note according to ID value
+        db.delete(NoteDatabase.TABLE_NAME, NoteDatabase.ID + "=" + note.getId(), null);
+    }public int updateNote(Note note) {//更新 更改
+        //update the info of an existing note
+        ContentValues values = new ContentValues();
+        values.put(NoteDatabase.CONTENT, note.getContent());
+        values.put(NoteDatabase.TIME, note.getTime());
+        values.put(NoteDatabase.MODE, note.getTag());
+        // updating row
+        return db.update(NoteDatabase.TABLE_NAME, values,
+                NoteDatabase.ID + "=?",new String[] { String.valueOf(note.getId())});
+    }
+
+
+    public void removeNote(Note note) {//删除
+        //remove a note according to ID value
+        db.delete(NoteDatabase.TABLE_NAME, NoteDatabase.ID + "=" + note.getId(), null);
+    }
+
+
+
 
 
 }
