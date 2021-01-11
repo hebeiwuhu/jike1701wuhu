@@ -65,10 +65,6 @@ public class EditActivity extends AppCompatActivity {
         myToolbar = (Toolbar) findViewById(R.id.edit_Toolbar);
         //不加这行菜单无法显示，告诉fragment我们有菜单的
 
-        // setHasOptionsMenu(true);
-        //清理
-//        Menu menu = myToolbar.getMenu();
-//        menu.clear();
         //加载菜单
         if(!Side_Menu.night_mode){
             myToolbar.inflateMenu(R.menu.bq_edit_menu);

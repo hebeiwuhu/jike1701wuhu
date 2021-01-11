@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class NoteBD_RC extends SQLiteOpenHelper {
+public class NoteBD_RC extends SQLiteOpenHelper {//SQLlite数据库创建
 
 
     public static final String TABLE_NAME = "notes_rc";//定义我的数据库名字
@@ -32,7 +32,7 @@ public class NoteBD_RC extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {//用于升级
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         /*for(int i = oldVersion; i < newVersion; i++) {
             switch (i) {
                 case 1:

@@ -11,11 +11,11 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBop_rc {
-    SQLiteOpenHelper dbHandler;//这是数据库处理器。用来处理数据库。
+public class DBop_rc {//操纵数据库的类 可以用它对日程进行CRUD
+    SQLiteOpenHelper dbHandler;//数据库处理器
     SQLiteDatabase db;
 
-    private static final String[] columns = {//把NodeDB每一列找出来做成个数组，便于操作。
+    private static final String[] columns = {//把NodeDB每一列找出来做成个数组，便于操作
             NoteBD_RC.ID,
             NoteBD_RC.TITLE,
             NoteBD_RC.CONTENT,
@@ -24,19 +24,19 @@ public class DBop_rc {
     };
 
     public DBop_rc(Context context){
-        dbHandler = new NoteBD_RC(context);//把DBhandler指向我们的数据库NoteDB。
+        dbHandler = new NoteBD_RC(context);//把DBhandler指向我们的数据库NoteDB
     }
 
     public void open(){
-        db = dbHandler.getWritableDatabase();//打开写入模式。
+        db = dbHandler.getWritableDatabase();//打开写入模式
     }
 
     public void close(){
         dbHandler.close();
     }
 
-    //把note 加入到database里面   //参数为一个数据Node结点。
-    public Note_RC addNote(Note_RC note){
+    //把note 加入到database里面   //参数为一个数据Node结点
+    public Note_RC addNote(Note_RC note){//增
         //ContentValues专门处理数据
         ContentValues contentValues = new ContentValues();
         contentValues.put(NoteBD_RC.TITLE, note.getTitle());
@@ -45,27 +45,22 @@ public class DBop_rc {
         contentValues.put(NoteBD_RC.DAY, note.getDay());
         long insertId = db.insert(NoteBD_RC.TABLE_NAME, null, contentValues);//自增长的id加入
         note.setId(insertId);//把Node中的id设为数据库中的id
-        Log.d("he1", "插入了"+note.getContent());
         return note;
     }
 
-    public Note_RC getNote(long id){//通过id获取Node
-        Log.d("hehehe", "找到了找到了11111"+id);
+    public Note_RC getNote(long id){//通过id获取Node  查
+
         List<Note_RC> notes = new ArrayList<>();
         notes=getAllNotes();
-        Log.d("hehehe", "找到了999"+notes.size());
         for(Note_RC note_rc:notes){
             if(note_rc.getId()==id){
-                Log.d("hehehe", "找到了找到了");
                 return note_rc;
             }
-            Log.d("hehehe", "找到了找到了222"+note_rc.getId());
         }
-        Log.d("hehehe", "没找到");
         return null;
     }
 
-    //获取数据库中的所有内容。
+    //获取数据库中的所有内容
     public List<Note_RC> getAllNotes(){
         Cursor cursor = db.query(NoteBD_RC.TABLE_NAME,columns,null,null,null, null, "day,time");
         List<Note_RC> notes = new ArrayList<>();
@@ -83,7 +78,7 @@ public class DBop_rc {
         }
         return notes;
     }
-    public List<Note_RC> getAllDayNotes(String day){
+    public List<Note_RC> getAllDayNotes(String day){//获取某一天的所有内容
 
         Cursor cursor = db.query(NoteBD_RC.TABLE_NAME,columns,NoteBD_RC.DAY + "=" + day,null,null, null, "time");
         List<Note_RC> notes = new ArrayList<>();
@@ -101,7 +96,7 @@ public class DBop_rc {
         return notes;
     }
 
-    public int updateNote(Note_RC note) {//更新 更改便签
+    public int updateNote(Note_RC note) {//更新 更改
         //update the info of an existing note
         ContentValues values = new ContentValues();
         values.put(NoteBD_RC.TITLE, note.getTitle());
@@ -113,7 +108,7 @@ public class DBop_rc {
                 NoteBD_RC.ID + "=?",new String[] { String.valueOf(note.getId())});
     }
 
-    public void removeNote(Note_RC note) {//删除便签
+    public void removeNote(Note_RC note) {//删除
         //remove a note according to ID value
         db.delete(NoteBD_RC.TABLE_NAME, NoteBD_RC.ID + "=" + note.getId(), null);
     }

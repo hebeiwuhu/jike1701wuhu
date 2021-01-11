@@ -16,11 +16,12 @@ import com.example.schedule_he.R;
 public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(Context context, Intent intent) {//当BroadcastReceiver接收到意图广播时调用此方法。
 
-        String title = intent.getExtras().getString("title");
-        String content = intent.getExtras().getString("content");
-        int id = intent.getExtras().getInt("id");
+
+        String title = intent.getExtras().getString("title");//日程的标题，get传递参数数组
+        String content = intent.getExtras().getString("content");//内容
+        int id = intent.getExtras().getInt("id");//独一无二的id
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         //创建一个Notification对象并设置该通知的属性
         Notification notification=new Notification.Builder(context)
@@ -48,4 +49,4 @@ public class AlarmReceiver extends BroadcastReceiver {
         manager.notify(id, notification);
 
     }
-}
+}//我感觉这个根本没有显示出来

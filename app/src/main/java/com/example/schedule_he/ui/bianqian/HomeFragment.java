@@ -90,16 +90,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
             root = inflater.inflate(R.layout.night_layout_home, container, false);
         }
 
-//    原始代码
-//        final TextView textView = root.findViewById(R.id.text_home);
-//        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
-
-
 
 
         //我的代码分割线///////////////////////
@@ -237,7 +227,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
 
     private void SearchCreate(){
         Menu menu = myToolbar.getMenu();
-        MenuItem mSearch = menu.findItem(R.id.action_search);
+        MenuItem mSearch = menu.findItem(R.id.action_search);//连接一个搜索页面
 
 
         if(Side_Menu.night_mode){
@@ -251,12 +241,12 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
             button2.setImageResource(R.drawable.ic_close_white_24dp);
         }
         SearchView mSearchView = (SearchView) mSearch.getActionView();
-        mSearchView.setQueryHint("Search");
+        mSearchView.setQueryHint("Search");//提示词
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
-            }
+            }//提交时
 
             @Override
             public boolean onQueryTextChange(String newText) {
@@ -312,20 +302,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
         refreshListViwe();//刷新
         super.onActivityResult(requestCode, resultCode, data);
 
-//        super.onActivityResult(requestCode, resultCode, data);
-//        String content = data.getStringExtra("content");
-//        String time = data.getStringExtra("time");
-//        //测试接收
-//        Log.d("he1", content);
-//        Log.d("he2", time);
-//        if(!content.equals("")){
-//            Note note = new Note(content,time,1);
-//            DBop op = new DBop(getContext());
-//            op.open();
-//            op.addNote(note);
-//            op.close();
-//        }
-//        refreshListViwe();
     }
 
     public void refreshListViwe(){//更新内容

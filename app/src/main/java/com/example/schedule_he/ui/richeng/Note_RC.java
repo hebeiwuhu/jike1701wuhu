@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Note_RC {
+public class Note_RC {//日程格式
     private long id;//自增长id
     private String title;
     private String content;//内容
@@ -112,4 +112,5 @@ public class Note_RC {
 
         }
     }
+
 }

@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.widget.Toast;
@@ -13,10 +14,14 @@ import androidx.fragment.app.Fragment;
 import com.example.schedule_he.ui.bianqian.DBop;
 import com.example.schedule_he.ui.bianqian.Note;
 import com.example.schedule_he.ui.bianqian.NoteDatabase;
+import com.example.schedule_he.ui.kecheng.Course;
+import com.example.schedule_he.ui.kecheng.DatabaseHelper;
 import com.example.schedule_he.ui.richeng.AlarmReceiver;
 import com.example.schedule_he.ui.richeng.DBop_rc;
 import com.example.schedule_he.ui.richeng.NoteBD_RC;
 import com.example.schedule_he.ui.richeng.Note_RC;
+import com.example.schedule_he.ui.user.LoginActivity;
+import com.example.schedule_he.ui.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,15 +41,16 @@ public class Load {
 
     private NoteDatabase dbHelper;
     private NoteBD_RC dbHelper_rc ;
+    private DatabaseHelper databaseHelper;
     private AlarmManager alarmManager;
 
     public void download(Context context,String username,Fragment fragment){
-        clear_date_offline(context,fragment);//清空本地数据
+        clear_date_offline(context,fragment);//清空本地
         read_date_online(username,context);//读取云端数据并放到本地
     }
 
     public void upload(Context context,String username){
-        clear_date_online(username);//清空云端数据
+        clear_date_online(username);//清空云端
         read_date_offline(context,username);//读取本地数据并一一上传
     }
 
@@ -59,12 +65,6 @@ public class Load {
         db.execSQL("update sqlite_sequence set seq=0 where name='notes'");
 
         //清空日程
-        alarmManager = (AlarmManager) fragment.getActivity().getSystemService(Context.ALARM_SERVICE);
-        DBop_rc op = new DBop_rc(context);
-        op.open();
-        cancelAlarms(op.getAllNotes(),context);//删除所有闹钟
-        op.close();
-
         dbHelper_rc = new NoteBD_RC(context);
         SQLiteDatabase db_rc = dbHelper_rc.getWritableDatabase();
         db_rc.delete("notes_rc", null, null);
@@ -83,7 +83,7 @@ public class Load {
     }
 
     /**
-     * 读取本地数据库  3个
+     * 读取本地数据库
      * **/
     public void read_date_offline(Context context,String username){
         List<Note> noteList = new ArrayList<Note>();
@@ -117,6 +117,7 @@ public class Load {
             notes1.setTime(note.getTime());
             insert(notes1);
         }
+
     }
     /**
      * 读取云端数据库  按用户名称查找 并放到本地
@@ -174,6 +175,26 @@ public class Load {
             }
         });
     }
+    //保存数据到数据库(课程)
+    private void saveData(Course course) {
+        SQLiteDatabase sqLiteDatabase =  databaseHelper.getWritableDatabase();
+        sqLiteDatabase.execSQL
+                ("insert into courses(course_name, teacher, class_room, day, class_start, class_end, week) " + "values(?, ?, ?, ?, ?, ?, ?)",
+                        new String[] {course.getCourseName(),
+                                course.getTeacher(),
+                                course.getClassRoom(),
+                                course.getDay()+"",
+                                course.getStart()+"",
+                                course.getEnd()+"",
+                                course.getWeek()}
+                );
+    }
+    /**
+     * 插入本地数据库
+     * **/
+    public void insert_date_offline(){
+
+    }
 
     /**
      * 批量删除50条
@@ -199,6 +220,7 @@ public class Load {
                 }
             });
     }
+
     /**删除整条数据**/
     public void deleteObject_Note(String objectId){
         Notes notes = new Notes();
@@ -234,8 +256,9 @@ public class Load {
         });
     }
     /**
-     * 云端批量查找并删除便签
-     **/
+     * 批量查找
+     *
+     * **/
     public void checkList_Note(String username){
         BmobQuery<Notes> query = new BmobQuery<Notes>();
         query.addWhereEqualTo("username", username);
@@ -261,8 +284,9 @@ public class Load {
         });
     }
     /**
-     * 云端批量查找并删除日程
-     **/
+     * 批量查找
+     *
+     * **/
     public void checkList_Note_rc(String username){
         BmobQuery<Notes_rc> query = new BmobQuery<Notes_rc>();
         //查询playerName叫“比目”的数据
@@ -286,6 +310,7 @@ public class Load {
             }
         });
     }
+
 
     //添加单条数据
     public void insert(BmobObject ob){

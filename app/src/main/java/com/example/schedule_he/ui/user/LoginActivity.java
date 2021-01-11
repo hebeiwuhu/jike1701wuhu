@@ -20,6 +20,8 @@ import com.example.schedule_he.BarColor;
 import com.example.schedule_he.MainActivity;
 import com.example.schedule_he.R;
 import com.example.schedule_he.ui.Side_Menu;
+import com.example.schedule_he.ui.kecheng.AddCourseActivity;
+import com.example.schedule_he.ui.richeng.RC_xiangxiActivity;
 
 import java.util.ArrayList;
 import java.util.List;

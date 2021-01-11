@@ -29,11 +29,12 @@ public class CalendarUtil {
             0x07954,0x06aa0,0x0ad50,0x05b52,0x04b60,0x0a6e6,0x0a4e0,0x0d260,0x0ea65,0x0d530,
             0x05aa0,0x076a3,0x096d0,0x04bd7,0x04ad0,0x0a4d0,0x1d0b6,0x0d250,0x0d520,0x0dd45,
             0x0b5a0,0x056d0,0x055b2,0x049b0,0x0a577,0x0a4b0,0x0aa50,0x1b255,0x06d20,0x0ada0
-    };/**1-4: 表示当年有无闰年，有的话，为闰月的月份，没有的话，为0。
-   * 5-16：为除了闰月外的正常月份是大月还是小月，1为30天，0为29天。
-    *   注意：从1月到12月对应的是第16位到第5位。
-    *17-20： 表示闰月是大月还是小月，仅当存在闰月的情况下有意义。
+    };/**1-4: 表示当年有无闰月，有的话，为闰月的月份，没有的话，为0。
+     * 5-16：为除了闰月外的正常月份是大月还是小月，1为30天，0为29天。
+     *   注意：从1月到12月对应的是第16位到第5位。
+     *17-20： 表示闰月是大月还是小月，仅当存在闰月的情况下有意义。
      */
+
     // 允许输入的最小年份
     private final static int MIN_YEAR = 1900;
     // 允许输入的最大年份
@@ -41,26 +42,27 @@ public class CalendarUtil {
     // 当年是否有闰月
     private static boolean isLeapYear;
     // 阳历日期计算起点
-    private final static String START_DATE = "19000130";
+    private final static String START_DATE = "19000130";//1月30日为猪年最后一天，下一天是鼠年第一天，1月30日是除夕。
+    //即农历最后一天。
 
 
     /**
      * 计算阴历 {@code year}年闰哪个月 1-12 , 没闰传回 0
      * @param year 阴历年
-     * @return (int)月份
+     * @return (int)月
      */
     private static int getLeapMonth(int year) {
         return (int) (LUNAR_INFO[year - 1900] & 0xf);
     }
 
     /**
-     * 计算阴历{@code year}年闰月多少天
+     * 计算阴历{@code year}年闰月多少天 如果该年没有闰月则返回0
      * @param year 阴历年
      * @return (int)天数
      */
     private static int getLeapMonthDays(int year) {
         if(getLeapMonth(year)!=0){
-            if((LUNAR_INFO[year - 1900] & 0xf0000)==0){
+            if((LUNAR_INFO[year - 1900] & 0xf0000)==0){//17-20位： 表示闰月是大月还是小月，仅当存在闰月的情况下有意义。
                 return 29;
             }else {
                 return 30;
@@ -78,11 +80,11 @@ public class CalendarUtil {
      * @throws Exception
      */
     private static int getMonthDays(int lunarYear, int month) throws Exception {
-        if ((month > 31) || (month < 0)) {
+        if ((month > 12) || (month < 0)) {
             throw(new Exception("月份有错！"));
         }
         // 0X0FFFF[0000 {1111 1111 1111} 1111]中间12位代表12个月，1为大月，0为小月
-        int bit = 1 << (16-month);
+        int bit = 1 << (16-month);//将1左移若干位，与对应位置对齐。16---5位对应1---12月
         if(((LUNAR_INFO[lunarYear - 1900] & 0x0FFFF)&bit)==0){
             return 29;
         }else {
@@ -105,18 +107,7 @@ public class CalendarUtil {
         return sum+getLeapMonthDays(year);
     }
 
-    /**
-     * 计算两个阳历日期相差的天数。计算不准确，已经废弃
-     * @param startDate 开始时间
-     * @param endDate 截至时间
-     * @return (int)天数
-     */
-    @Deprecated
-    private static int daysBetween2(Date startDate, Date endDate) {
-        long between_days=(endDate.getTime()-startDate.getTime())/(1000*3600*24);
 
-        return Integer.parseInt(String.valueOf(between_days));
-    }
 
     /**
      * 计算两个阳历日期相差的天数。
@@ -151,7 +142,7 @@ public class CalendarUtil {
         }
         for (int i = 0; i < Math.abs(year2-year1); i++) {
             //获取小的时间当前年的总天数
-            days += can.getActualMaximum(Calendar.DAY_OF_YEAR);
+            days += can.getActualMaximum(Calendar.DAY_OF_YEAR);//调用日历的方法求当前年的天数
             //再计算下一年。
             can.add(Calendar.YEAR, 1);
         }
@@ -191,11 +182,11 @@ public class CalendarUtil {
      * @throws Exception
      */
     public static String lunarToSolar(String lunarDate, boolean leapMonthFlag) throws Exception{
-        int lunarYear = Integer.parseInt(lunarDate.substring(0, 4));
-        int lunarMonth = Integer.parseInt(lunarDate.substring(4, 6));
-        int lunarDay = Integer.parseInt(lunarDate.substring(6, 8));
+        int lunarYear = Integer.parseInt(lunarDate.substring(0, 4));//转换前四位成整型变量为年份
+        int lunarMonth = Integer.parseInt(lunarDate.substring(4, 6));//5，6位作为月
+        int lunarDay = Integer.parseInt(lunarDate.substring(6, 8));//7，8位作为日
 
-        checkLunarDate(lunarYear, lunarMonth, lunarDay, leapMonthFlag);
+        checkLunarDate(lunarYear, lunarMonth, lunarDay, leapMonthFlag);//检查日期输入是否合法
 
         int offset = 0;
 
@@ -241,12 +232,14 @@ public class CalendarUtil {
                 offset += temp;
 
                 if (lunarDay > getLeapMonthDays(lunarYear)) {
-                    throw(new Exception("不合法的农历日期！"));//抛出异常
+                    throw(new Exception("不合法的农历日期！"));
                 }
                 offset += lunarDay;
             }
         }
+        //以上计算了从1900年到输入的阴历日期一共经过了多少天
 
+        //接下来只要从阳历起始日期加上对应的天数即可得到阳历对应的天数
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
         Date myDate = null;
         myDate = formatter.parse(START_DATE);
@@ -263,8 +256,9 @@ public class CalendarUtil {
      * @param solarDate 阳历日期,格式YYYYMMDD
      * @return 阴历日期
      * @throws Exception
+     * @author liu 2015-1-5
      */
-    public static String solarToLunar(String solarDate) throws Exception{
+    public static String solarToLunar(String solarDate) throws Exception{//同理于阴转阳
         int i;
         int temp = 0;
         int lunarYear;
@@ -364,7 +358,7 @@ public class CalendarUtil {
 
     //特殊小于10加“初”
     //二十几用“廿”
-    private String toChinese_day(String string) {//转换中文日期
+    private String toChinese_day(String string) {
         String[] s1 = { "", "一", "二", "三", "四", "五", "六", "七", "八", "九" };
         String[] s2 = { "十", "廿", "千", "万", "十", "百", "千", "亿", "十", "百", "千" };
 
@@ -407,6 +401,7 @@ public class CalendarUtil {
         }
         return result;
     }
+
 
     private String JieRi_1(int month, int day){//显示节日汉字（农历）
         switch (month){
@@ -472,6 +467,7 @@ public class CalendarUtil {
         }
         return "";
     }
+
     private String JieRi_2(String monthday) {//显示节日汉字（公历）
         monthday=monthday.substring(4);
         Log.d("he", "截取文字"+monthday);
@@ -498,3 +494,6 @@ public class CalendarUtil {
         return "";
     }
 }
+
+
+

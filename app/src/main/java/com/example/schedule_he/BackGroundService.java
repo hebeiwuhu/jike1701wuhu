@@ -11,6 +11,7 @@ import android.util.Log;
 import org.json.JSONException;
 import static android.app.Notification.PRIORITY_MAX;
 
+
 public class BackGroundService extends Service {
     Notification notification;
     private Context mContext;
@@ -32,7 +33,7 @@ public class BackGroundService extends Service {
                 .setWhen(System.currentTimeMillis())
                 .setTicker("日程表")
                 .setContentTitle("日程表")
-                .setContentText("日程表正在运行")
+                .setContentText("日常镖正在运行")
                 .setOngoing(true)
                 .setPriority(PRIORITY_MAX)
                 .setContentIntent(pendingIntent)
@@ -54,11 +55,9 @@ public class BackGroundService extends Service {
                         es.printStackTrace();
                     }
                 }
-                //进行自己的操作
+
             }
         }.start();
-        //3.最关键的神来之笔，也是最投机的动作，没办法要骗过CPU
-        //这就是播放音乐类APP不被杀的做法，自己找个无声MP3放进来循环播放
         if (bgmediaPlayer == null) {
             bgmediaPlayer = MediaPlayer.create(this,R.raw.silent);
             bgmediaPlayer.setLooping(true);

@@ -5,13 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.schedule_he.R;
 import com.example.schedule_he.ui.Side_Menu;
+
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 public class RC_ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
@@ -33,9 +35,9 @@ public class RC_ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ViewHolder itemHolder = (ViewHolder) holder;
         if (getItemViewType(position) == TYPE_TOP) {
-            // 第一行头的竖线不显示。
+            // 第一行头的竖线不显示
             itemHolder.tvTopLine.setVisibility(View.INVISIBLE);
-            // 字体颜色加深。
+            // 字体颜色加深
             if(!Side_Menu.night_mode){
                 itemHolder.tvAcceptTime.setTextColor(0xff336633);
                 itemHolder.tvAcceptStation.setTextColor(0xff000000);
